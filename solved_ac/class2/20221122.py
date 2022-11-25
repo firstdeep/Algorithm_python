@@ -125,7 +125,7 @@ https://wiki.python.org/moin/TimeComplexity
 '''
 def find_number():
     N = int(input())
-    a_data = list(map(int, input().split())) # list 를 set으로 바꿔줘야 한다. 어차피 대상은 a_data에서 찾는 것 이기 때문에
+    a_data = set(map(int, input().split())) # list 를 set으로 바꿔줘야 한다. 어차피 대상은 a_data에서 찾는 것 이기 때문에
     M = int(input())
     b_data = list(map(int, input().split()))
 

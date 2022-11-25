@@ -93,4 +93,4 @@ def movie():
 
 
 if __name__=="__main__":
-    cutting_lan()
+    movie()

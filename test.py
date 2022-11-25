@@ -1,22 +1,26 @@
 import sys
-def find_decimal(N):
-    arr = [True] * (N+1)
-    arr[0] = False
-    arr[1] = False
+from collections import Counter
 
-    for i in range(2, int(math.sqrt(N))+1):
-        if arr[i] == True:
-            j = 2
-            while (i*j) <= N:
-                arr[i*j] = False
-                j += 1
+n, m, inven = map(int, sys.stdin.readline().split())
+ground = []
+for _ in range(n): ground += map(int, sys.stdin.readline().split())
+height, time = 0, 1000000000000000
 
-    return arr
+min_h = min(ground)
+max_h = max(ground)
+_sum = sum(ground)
+ground = dict(Counter(ground))
 
+for i in range(min_h, max_h + 1):
+    if _sum + inven >= i * n * m:
+        cur_time = 0
+        for key in ground:
+            if key > i:
+                cur_time += (key - i) * ground[key] * 2
+            elif key < i:
+                cur_time += (i - key) * ground[key]
+        if cur_time <= time:
+            time = cur_time
+            height = i
 
-if __name__ =="__main__":
-    M, N = map(int, sys.stdin.readline().split())
-    arr = find_decimal(N)
-    for i in range(M,len(arr)):
-        if arr[i] == True:
-            print(i)
+print(time, height)
