@@ -260,10 +260,57 @@ def mine():
     print(time, height)
 
 '''
-아스키코드 값은
+아스키코드 값변경하는 것 int -> char: chr
+char -> int: ord 
 '''
 def Hashing():
+    N = int(input())
+    input_str = list(str(input()))
+    r, M = 31, 1234567891
 
+    total = 0
+    init = ord('a')-1
+
+    for idx, item in enumerate(input_str):
+        total += (ord(item)-init) * (r**idx)
+
+    print(divmod(total, M)[1])
+
+
+def coordinate_sort2():
+    N = int(input())
+    data = [list(map(int, input().split())) for _ in range(N)]
+    data = sorted(data, key=lambda x:x[0])
+    data = sorted(data, key=lambda x:x[1])
+    for item in data:
+        print(*item)
+
+def zero():
+    N = int(input())
+    arr = []
+    for _ in range(N):
+        num = int(input())
+        if num ==0:
+            arr.pop()
+        else:
+            arr.append(num)
+    print(sum(arr))
+
+'''
+input output 범위 보고 BF문제인지 추축하기 
+sort등을 하면 오히려 일단 모든 코딩을 간단하게 구현해 놓고 
+세부적인 내용 생각하기 
+'''
+def big_guy():
+    N = int(input())
+    data = [list(map(int, input().split())) for _ in range(N)]
+
+    for i in data:
+        rank = 1
+        for j in data:
+            if i[0]<j[0] and i[1]<j[1]:
+                rank +=1
+        print(rank, end=' ') # 엔터 없이 출력하는 방법
 
 if __name__ == '__main__':
-    Hashing()
+    big_guy()
