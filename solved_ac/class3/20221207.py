@@ -53,6 +53,8 @@ def castle():
                 result2 = max(result2, bfs(i,j))
 
     # BF문제?
+    # BF가 맞네...
+    # 하나를 뺐을 때 부터 모든 것을 찾아야 하기 때문에 visited를 여기서 선언한다.
     for i in range(M):
         for j in range(N):
             num = 1
@@ -95,7 +97,6 @@ def bit_mask():
                 print(1)
             else: print(0)
         elif command[0] == 'remove': # 특정 자리 값을 0으로 바꿔주는 것 이동시킨 다음 반전하여 and 연산한다.
-            # print(bin(S))
             S &= ~(1<<int(command[1]))
         # elif a == 'toggle':
         elif command[0] == 'all':
@@ -118,6 +119,9 @@ def bit_mask():
 def bitcount(x):
     if x==0: return 0
     return x&2 + bitcount(x//2)
+
+
+
 
 if __name__=="__main__":
     castle()

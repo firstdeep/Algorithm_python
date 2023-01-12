@@ -1,54 +1,58 @@
-# S = (1<<21) # 이게 의미하는 것이 1^20 만약에 1자릿수로 줄이면서 모두 1일 때는 -1 해주면 20자리에 모두 1이 된다.
-# print(bin(S))
-# S |=(1<<3)
-# S |=(1<<1)
-# print(bin(S))
-# S = S & (1<<3)
-# print(bin(S))
-# print(S)
+'''
+조건1 앞으로는 1,2,3만큼 밖에 움직이지 못한다.
+조건2 방향은 상하좌우 4방향으로 꺽을 수 있다.
 
-# # print(bin(~(1<<3)))
-# print(bin(S))
-# # print(bin(b))
-#
-#
-# def bitcount(x):
-#     if x==0: return 0
-#     return x % 2 + bitcount(x//2)
+안되는 것이 무엇인가?
+해결해야 될 문제점:
+'''
+from collections import deque
+def robot():
+    N,M = map(int,input().split())
+    graph = [list(map(int, input().split())) for _ in range(N)]
+    fx, fy, fd = map(int,input().split())
+    tx, ty, td = map(int, input().split())
+    fx, fy, fd = fx-1, fy-1, fd-1
+    tx, ty, td = tx-1, ty-1, td-1
+
+    dx = [0,0,1,-1]
+    dy = [1,-1,0,0]
+
+    def direction_change_count(pre, post):
+        if pre==post:
+            return 0
+        elif (pre==0 and post==1) or (pre==1 and post==0):
+            return 2
+        elif (pre==2 and post==3) or (pre==3 and post==2):
+            return 2
+        else: return 1
 
 
+    def bfs():
+        q = deque()
+        q.append([fx,fy,fd,0])
+        visited = [[[False for _ in range(4)] for _ in range(M)]for _ in range(N)]
+        visited[fx][fy][fd] = True
+        while q:
+            x,y,dir,cnt = q.popleft()
+            if x == tx and y == ty:
+                return cnt + direction_change_count(dir, td)
+            for i in range(1,4): # 여기서 먼저 직진 check i가 곱해지는 것이기 때문에 1부터 시작
+                nx = x + dx[dir] * i # dx에 해당 방향에 있는 것이 들어가야 한다.
+                ny = y + dy[dir] * i
+                if 0<=nx<N and 0<=ny<M:
+                    if visited[nx][ny][dir]==False and graph[nx][ny]==0:
+                        visited[nx][ny][dir] = True
+                        q.append([nx,ny,dir,cnt+1])
+                else:
+                    break
 
-import sys
-def function():
-    # 1이상 20이하 이기 때문에 bit 연산을 하기 위해서는 앞에 자리 빼고 0포함 총 21자리 필요
-    S = (1<<21)
-    for _ in range(int(input())):
-        command = sys.stdin.readline().split()
-        if command[0] == 'add': # 합집합으로 구현하면 됨, 원래 있었어도 1 없으면 추가하기 떄문에 1
-            S |= (1<<int(command[1]))# 합집합이다.
-            # print(bin(S))
-        elif command[0] == 'check':
-            # print(bin(S))
-            # if S & (1<<int(command[1])) == 0: # 해당 부분과 나머지가 같지 않을 때 0이 나온다. 같으면 10진법 숫자가 나온다.
-            #     print(0)
-            if (S & (1<<int(command[1]))) == (1<<int(command[1])):
-                print(1)
-            else: print(0)
-        elif command[0] == 'remove': # 특정 자리 값을 0으로 바꿔주는 것 이동시킨 다음 반전하여 and 연산한다.
-            # print(bin(S))
-            S &= ~(1<<int(command[1]))
-        # elif a == 'toggle':
-        elif command[0] == 'all':
-            S = (1 << 21)
-            S ^= ~S
-            # print(bin(S))
-            # 또는 모든 비트를 1로 만들기 위해서는 단수 -1하면 된다. S = (1<<21) -1
-        elif command[0] == 'empty':
-            S = (1<<21)
-            # print(bin(S))
-        elif command[0] == 'toggle':
-            if S & (1<<int(command[1])) ==0: # 없다는 것인데 없으면 넣어주기
-                S |= (1<<int(command[1]))
-            else: S &= ~(1<<int(command[1]))
+            for i in range(4):
+                if i!=dir and visited[x][y][i] == False:
+                    visited[x][y][i] = True
+                    q.append([x,y,i,cnt+direction_change_count(dir,i)])
+            print(q)
 
-function()
+    print(bfs())
+
+if __name__=="__main__":
+    robot()
